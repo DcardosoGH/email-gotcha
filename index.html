@@ -52,6 +52,14 @@
             margin: 2rem 0;
             border-radius: 10px;
         }
+        .visitor-info {
+            margin-top: 1rem;
+            padding: 1rem;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            color: #666;
+        }
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(-20px); }
             to { opacity: 1; transform: translateY(0); }
@@ -75,10 +83,45 @@
         </div>
 
         <img src="cute-cat-cat.gif" alt="Cute cat gif" class="cat-gif">
+
+        <div class="visitor-info">
+            <p> Neste momento é possível saber: </p>
+            <p>👀 O seu endereço de IP é: <span id="ip">...</span></p>
+            <p>📍 Localização: <span id="location">...</span></p>
+            <p>🌐 ISP: <span id="isp">...</span></p>
+            <p>💻 Sistema: <span id="userAgent">...</span></p>
+        </div>
         
         <div class="security-tips">
             <h3>Feliz Natal! 🎄🎅</h3>
         </div>
     </div>
+     <script>
+        // Get visitor information
+        async function getVisitorInfo() {
+            try {
+                const response = await fetch('https://ipapi.co/json/');
+                const data = await response.json();
+                
+                // Update IP and location information
+                document.getElementById('ip').textContent = data.ip;
+                document.getElementById('location').textContent = 
+                    `${data.city}, ${data.region}, ${data.country_name}`;
+                document.getElementById('isp').textContent = data.org;
+
+                // Get browser and OS information
+                const userAgent = navigator.userAgent;
+                document.getElementById('userAgent').textContent = userAgent;
+                
+            } catch (error) {
+                console.error('Error getting visitor info:', error);
+                document.getElementById('ip').textContent = 'Não foi possível obter informações';
+            }
+        }
+
+        // Run both functions when page loads
+        updateCounter();
+        getVisitorInfo();
+    </script>
 </body>
 </html>
